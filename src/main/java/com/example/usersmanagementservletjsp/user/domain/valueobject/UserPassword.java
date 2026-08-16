@@ -1,6 +1,8 @@
 package com.example.usersmanagementservletjsp.user.domain.valueobject;
 
 import com.example.usersmanagementservletjsp.user.domain.exceptions.InvalidUserPasswordException;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import java.util.Objects;
 
 public final class UserPassword {
 
@@ -11,6 +13,41 @@ public final class UserPassword {
 
     private UserPassword(final String value) {
         this.value = value;
+    }
+
+    public static UserPassword fromPlainText(final String plainText) {
+        final String normalizedValue = Objects.requireNonNull(plainText, "Password cannot be null").trim();
+        validateNotEmpty(normalizedValue);
+        validateMinimumLength(normalizedValue);
+        final String hash = BCrypt.withDefaults().hashToString(BCRYPT_COST, normalizedValue.toCharArray());
+        return new UserPassword(hash);
+    }
+
+    public static UserPassword fromHash(final String hash){
+        Objects.requireNonNull(hash, "Password hash cannot be null");
+        return new UserPassword(hash);
+    }
+
+    public boolean verifyPlain(final String plainText) {
+        final String normalizedPlain = Objects.requireNonNull(plainText, "Plain password cannot be null").trim();
+        final BCrypt.Result result = BCrypt.verifyer().verify(normalizedPlain.toCharArray(), value);
+        return result.verified;
+    }
+
+    public String value(){
+        return value;
+    }
+
+    @Override
+    public boolean equals(final Object other){
+        if (this == other) return true;
+        if (!(other instanceof UserPassword userPassword)) return false;
+        return Objects.equals(value, userPassword.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     private static void validateNotEmpty(final String normalizedValue){
@@ -24,4 +61,5 @@ public final class UserPassword {
             throw InvalidUserPasswordException.becauseLengthIsTooShort(MINIMUM_LENGTH);
         }
     }
+
 }
