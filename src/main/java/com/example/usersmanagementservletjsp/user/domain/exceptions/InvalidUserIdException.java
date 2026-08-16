@@ -2,7 +2,7 @@ package com.example.usersmanagementservletjsp.user.domain.exceptions;
 
 import com.example.usersmanagementservletjsp.shared.domain.exceptions.DomainException;
 
-public class InvalidUserIdException extends DomainException {
+public final class InvalidUserIdException extends DomainException {
 
     private static final String MESSAGE_EMPTY = "The user id must not be empty";
 
