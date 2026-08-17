@@ -20,20 +20,40 @@ public class UserModel {
             final UserId id,
             final UserName name,
             final UserPassword password,
-            final UserRole role){
-        return new UserModel(id, name, password, role);
-    }
-
-    public UserModel update(
-            final UserName name,
-            final UserPassword password,
-            final UserRole role){
+            final UserRole role
+    ) {
         return new UserModel(
-                this.id,
-                Objects.requireNonNull(name, "UserName cannot be null"),
-                Objects.requireNonNull(password, "UserPassword cannot be null"),
-                Objects.requireNonNull(role, "UserRole cannot be null")
+                Objects.requireNonNull(id, "Id cannot be null"),
+                Objects.requireNonNull(name, "Name cannot be null"),
+                Objects.requireNonNull(password, "Password cannot be null"),
+                Objects.requireNonNull(role, "Role cannot be null")
         );
     }
 
+    public UserModel updateName(final UserName name) {
+        return new UserModel(
+                this.id,
+                Objects.requireNonNull(name, "Name cannot be null"),
+                this.password,
+                this.role
+        );
+    }
+
+    public UserModel changePassword(final UserPassword password) {
+        return new UserModel(
+                this.id,
+                this.name,
+                Objects.requireNonNull(password, "Password cannot be null"),
+                this.role
+        );
+    }
+
+    public UserModel updateRole(final UserRole role) {
+        return new UserModel(
+                this.id,
+                this.name,
+                this.password,
+                Objects.requireNonNull(role, "Role cannot be null")
+        );
+    }
 }
