@@ -9,7 +9,9 @@ import com.example.usersmanagementservletjsp.user.domain.model.UserModel;
 import com.example.usersmanagementservletjsp.user.domain.valueobject.UserId;
 import com.example.usersmanagementservletjsp.user.domain.valueobject.UserName;
 import com.example.usersmanagementservletjsp.user.domain.valueobject.UserPassword;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class UserApplicationMapper {
 
     public UserModel fromCreateCommandToModel(final CreateUserCommand command) {
